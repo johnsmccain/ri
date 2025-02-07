@@ -1,23 +1,22 @@
-import { http, createConfig } from 'wagmi';
-import { mainnet, bscTestnet } from 'wagmi/chains';
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-} from '@rainbow-me/rainbowkit';
-
-const projectId = '296924cdb9a40ac2bfe6b78e60779e09';
-
-const { wallets } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  projectId,
-  chains: [mainnet, bscTestnet],
-});
-
-export const config = createConfig({
-  chains: [mainnet, bscTestnet],
-  transports: {
-    [mainnet.id]: http(),
-    [bscTestnet.id]: http(),
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { bsc, bscTestnet } from 'viem/chains';
+import { binanceWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
+import { createConfig, http } from 'wagmi';
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [rainbowWallet, walletConnectWallet, trustWallet, metaMaskWallet, binanceWallet],
   },
-  wallets,
+],
+{
+  appName: 'By_forex',
+  projectId: '296924cdb9a40ac2bfe6b78e60779e09',
+})
+export const config = createConfig({
+  connectors,
+  chains: [bsc, bscTestnet],
+  transports: {
+    [bsc.id]: http(),
+    [bscTestnet.id]: http()
+  },
 });
