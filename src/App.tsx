@@ -4,6 +4,8 @@ import { useAccount } from 'wagmi';
 import { Copy, Menu, Wallet } from 'lucide-react';
 import { useUserInfo, useRoyaltyPool, useInvestment } from './hooks/useContract';
 import { formatEther } from 'viem';
+import Hero from './components/Hero';
+import Navbar from './components/Navbar';
 function App() {
   const { isConnected } = useAccount();
 
@@ -59,18 +61,10 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-black to-yellow-900">
       <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center mb-8">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-white"><span className="text-yellow-400">G</span>Rich</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <ConnectButton />
-            <Menu className="text-white w-6 h-6 cursor-pointer" />
-          </div>
-        </header>
+      <Navbar/>
 
         {isConnected ? (
-          <div className="space-y-8">
+          <div className="space-y-8 mt-20">
             <section className="bg-white rounded-xl p-6">
               <h2 className="text-2xl font-bold mb-6">Make Your Mark</h2>
               <div className="grid grid-cols-2 gap-6 mb-6">
@@ -214,11 +208,7 @@ function App() {
             )}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <h2 className="text-2xl font-bold text-white mb-6">Welcome to GRich</h2>
-            <p className="text-gray-300 mb-8">Connect your wallet to get started</p>
-            <ConnectButton />
-          </div>
+          <Hero/>
         )}
       </div>
     </div>
