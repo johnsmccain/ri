@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+// import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
-import { Copy, Menu, Wallet } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { useUserInfo, useRoyaltyPool, useInvestment } from './hooks/useContract';
 import { formatEther } from 'viem';
 import Hero from './components/Hero';
@@ -55,6 +55,11 @@ function App() {
     if (!value) return '$0';
     return `$${parseFloat(formatEther(value)).toFixed(2)}`;
   };
+
+  const formatToken = (value: bigint | undefined) => {
+    if (!value) return '0';
+    return `${parseFloat(formatEther(value)).toFixed(2)}`;
+  };
   // Check if the account is activated (has made the initial $6 investment)
   const isAccountActivated = userInfo?.totalDepositUSDT && userInfo.totalDepositUSDT > 0n;
 
@@ -68,7 +73,11 @@ function App() {
             <section className="bg-white rounded-xl p-6">
               <h2 className="text-2xl font-bold mb-6">Make Your Mark</h2>
               <div className="grid grid-cols-2 gap-6 mb-6">
-                <div>
+                <div onClick={() => setUseTopUpWallet(false)}
+                          className={`rounded-lg p-6 ${!useTopUpWallet
+                              ? 'border-2 border-yellow-400 text-black'
+                              : ' text-gray-600'
+                            }`}>
                   <div className="text-center mb-4">
                     <div className="text-3xl font-bold mb-2">
                       {isAccountActivated ? 'Invest' : '6$'}
@@ -87,7 +96,7 @@ function App() {
                         className="w-full p-2 border rounded-lg text-center"
                         min="1"
                       />
-                      <div className="flex items-center justify-center gap-4">
+                      {/* <div className="flex items-center justify-center gap-4">
                         <button
                           onClick={() => setUseTopUpWallet(false)}
                           className={`flex-1 py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${!useTopUpWallet
@@ -107,15 +116,20 @@ function App() {
                           <Wallet className="w-4 h-4" />
                           Topup
                         </button>
-                      </div>
+                      </div> */}
                     </div>
                   ) : (
                     <div className="text-center text-gray-600">
-                      Initial investment required
+                      Inactive
                     </div>
                   )}
                 </div>
-                <div className="text-center">
+                <div className={`text-center flex flex-col items-center justify-center   rounded-lg p-4 ${useTopUpWallet
+                              ? 'border-2 border-yellow-400 text-black'
+                              : ' text-gray-600'
+                            }`}
+                onClick={() => setUseTopUpWallet(true)}
+                >
                   <div className="text-3xl font-bold mb-2">
                     {formatUSD(userTopUpWallet as bigint)}
                   </div>
@@ -181,7 +195,7 @@ function App() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Total Cashback claimed</span>
-                  <span>{formatUSD(userInfo?.totalTokensClaimed)}</span>
+                  <span>{formatToken(userInfo?.totalTokensClaimed)} GRich</span>
                 </div>
               </div>
             </section>
