@@ -1,5 +1,5 @@
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
-import { bsc } from 'viem/chains';
+import { bscTestnet } from 'viem/chains';
 import { binanceWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
 import { createConfig, http } from 'wagmi';
 const connectors = connectorsForWallets([
@@ -14,8 +14,8 @@ const connectors = connectorsForWallets([
 })
 export const config = createConfig({
   connectors,
-  chains: [bsc],
+  chains: [bscTestnet],
   transports: {
-    [bsc.id]: http(),
+    [bscTestnet.id]: http(),
   },
 });
