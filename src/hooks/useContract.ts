@@ -1,26 +1,27 @@
-import {  useAccount, useWriteContract, useReadContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useWaitForTransactionReceipt, useReadContract, useWriteContract } from 'wagmi';
 import { CONTRACT_ABI, TOKEN_ABI } from '../abi';
 import { parseEther } from 'viem';
-
 
 export function useUserInfo() {
   const { address } = useAccount();
   
-  const { data: userInfo }  = useReadContract({
+  const { data: userInfo } = useReadContract({
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
     functionName: 'getUserDetail',
     args: [address],
     // enabled: !!address,
   }) as any;
+
   const { data: userTopUpWallet } = useReadContract({
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
     functionName: 'userTopUpWallet',
-    args: [userInfo?.id],
+    args: [userInfo?.id || 0n],
+    // enabled: !!userInfo?.id,
   });
 
-  return {userInfo, userTopUpWallet};
+  return { userInfo, userTopUpWallet };
 }
 
 export function useRoyaltyPool() {
@@ -39,7 +40,36 @@ export function useRoyaltyPool() {
   return { royaltyPool, totalRoyaltyPool };
 }
 
+export function useUserActivities(page: number = 1) {
+  const { userInfo } = useUserInfo() as any;
 
+  const { data: activities, isError, isLoading } = useReadContract({
+    address: CONTRACT_ABI.address as `0x${string}`,
+    abi: CONTRACT_ABI.abi,
+    functionName: 'getRecentActivities',
+    args: [userInfo?.id || 0n, BigInt(page)],
+    // enabled: !!userInfo?.id,
+    // watch: true,
+  }) as any;
+
+  console.log(activities)
+
+  // Transform the activities into a more usable format
+  // const formattedActivities = activities ? activities?.map((activity: any) => ({
+  //   id: activity[0],           // User ID
+  //   usdtAmount: activity[1],   // USDT Amount
+  //   tokenAmount: activity[2],  // Token Amount
+  //   mode: activity[3],         // Transaction Mode
+  //   refId: activity[4]         // Reference ID
+  // })) : [];
+
+  return { 
+    activities,
+    isLoading,
+    isError,
+    hasMore: activities?.length > 0 
+  };
+}
 
 export function useInvestment() {
   const { address } = useAccount();
