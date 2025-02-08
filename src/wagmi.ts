@@ -9,7 +9,7 @@ const connectors = connectorsForWallets([
   },
 ],
 {
-  appName: 'By_forex',
+  appName: 'G_rich',
   projectId: '296924cdb9a40ac2bfe6b78e60779e09',
 })
 export const config = createConfig({
