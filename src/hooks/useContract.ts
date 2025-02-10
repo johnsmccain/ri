@@ -13,6 +13,7 @@ export function useUserInfo() {
     // enabled: !!address,
   }) as any;
 
+console.log(userInfo)
   const { data: userTopUpWallet } = useReadContract({
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
@@ -104,14 +105,15 @@ export function useInvestment() {
     // Get referral from URL or use default
     const urlParams = new URLSearchParams(window.location.search);
     const referral = urlParams.get('referral');
-    const refId = referral ? BigInt(referral) : 1000n; // Default referral code is 1001
-
+    const refId = referral ? BigInt(referral) : 1001n; // Default referral code is 1001
+    console.log(address, refId, parseEther(amount), useTopUpWallet)
     try {
       await writeContract({
         abi: CONTRACT_ABI.abi,
         address: CONTRACT_ABI.address as `0x${string}`,
         functionName: 'buy',
         args: [address, refId, parseEther(amount), useTopUpWallet],
+        value: BigInt(amount),
       })
 
     } catch (error) {

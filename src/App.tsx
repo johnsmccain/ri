@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Copy } from 'lucide-react';
-import { useUserInfo, useRoyaltyPool, useInvestment } from './hooks/useContract';
+import { useUserInfo,  useInvestment } from './hooks/useContract';
 import { formatEther } from 'viem';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
@@ -16,7 +16,7 @@ function App() {
   const [Temp, setTemp] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userInfo, userTopUpWallet } = useUserInfo();
-  const { royaltyPool, totalRoyaltyPool } = useRoyaltyPool();
+  // const { royaltyPool, totalRoyaltyPool } = useRoyaltyPool();
   const { invest, approve, waitForTransactionReceipt, waitForApprovalTransactionReceipt } = useInvestment();
 
   const handleCopyReferral = () => {
@@ -129,7 +129,7 @@ function App() {
               </div>
               <button
                 onClick={handleInvest}
-                disabled={loading || !isAccountActivated || !investAmount}
+                disabled={loading || !isConnected}
                 className="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
               >
                 {loading ? (
@@ -151,10 +151,10 @@ function App() {
                 <span>Royalty Pool</span>
                 <div className="flex items-center gap-4">
                   <span>
-                    {formatUSD(royaltyPool as bigint)} / {formatUSD(totalRoyaltyPool as bigint)}
+                    {formatUSD(userInfo?.currentRoyaltyIncomeUSDT as bigint)} / {formatUSD(userInfo?.royaltyIncomeUSDT as bigint)}
                   </span>
                   <span className="bg-gray-200 px-3 py-1 rounded-lg text-sm">
-                    {userInfo?.royaltyIncomeUSDT && userInfo.royaltyIncomeUSDT > 0n ? 'Eligible' : 'Not Eligible'}
+                    {userInfo?.currentRoyaltyIncomeUSDT > 0n ? 'Eligible' : 'Not Eligible'}
                   </span>
                 </div>
               </div>
