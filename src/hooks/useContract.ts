@@ -4,7 +4,7 @@ import { parseEther } from 'viem';
 
 export function useUserInfo() {
   const { address } = useAccount();
-  
+
   const { data: userInfo } = useReadContract({
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
@@ -13,7 +13,7 @@ export function useUserInfo() {
     // enabled: !!address,
   }) as any;
 
-console.log(userInfo)
+  // console.log(userInfo)
   const { data: userTopUpWallet } = useReadContract({
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
@@ -64,30 +64,39 @@ export function useUserActivities(page: number = 1) {
   //   refId: activity[4]         // Reference ID
   // })) : [];
 
-  return { 
+  return {
     activities,
     isLoading,
     isError,
-    hasMore: activities?.length > 0 
+    hasMore: activities?.length > 0
   };
 }
 
 export function useInvestment() {
   const { address } = useAccount();
-  const {writeContract, data: txHash} = useWriteContract()
+  const { writeContract, data: txHash } = useWriteContract()
   const { isFetched: waitForTransactionReceipt } = useWaitForTransactionReceipt({
     hash: txHash,
   })
 
-  const {writeContract: approveContract, data: txHashApprove} = useWriteContract()
+  const { writeContract: approveContract, data: txHashApprove } = useWriteContract()
   const { isFetched: waitForApprovalTransactionReceipt } = useWaitForTransactionReceipt({
     hash: txHashApprove,
   })
-
-
+  const { data: allowance } = useReadContract({
+    abi: TOKEN_ABI.abi,
+    address: TOKEN_ABI.address as `0x${string}`,
+    functionName: 'allowance',
+    args: [address, CONTRACT_ABI.address as `0x${string}`],
+  })
+  console.log(allowance)
   const approve = async (amount: string) => {
+    if (allowance as bigint >= parseEther(amount)) {
+      invest(amount);
+      return
+    }
     if (!address) return;
-    
+    console.log(address, parseEther(amount))
     try {
       await approveContract({
         abi: TOKEN_ABI.abi,
@@ -105,15 +114,17 @@ export function useInvestment() {
     // Get referral from URL or use default
     const urlParams = new URLSearchParams(window.location.search);
     const referral = urlParams.get('referral');
-    const refId = referral ? BigInt(referral) : 1001n; // Default referral code is 1001
+    const refId = referral && !isNaN(Number(referral)) ? BigInt(referral) : 1000n;
+    const parsedAmount = amount && !isNaN(Number(amount)) ? parseEther(amount) : 0n;
+
     console.log(address, refId, parseEther(amount), useTopUpWallet)
     try {
       await writeContract({
         abi: CONTRACT_ABI.abi,
         address: CONTRACT_ABI.address as `0x${string}`,
         functionName: 'buy',
-        args: [address, refId, parseEther(amount), useTopUpWallet],
-        value: BigInt(amount),
+        args: [address, refId, parsedAmount, useTopUpWallet],
+        value: 0n,
       })
 
     } catch (error) {

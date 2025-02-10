@@ -11,7 +11,7 @@ import TransactionList from './components/TransactionList';
 function App() {
   const { isConnected } = useAccount();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'referrals' | 'transactions'>('dashboard');
-  const [investAmount, setInvestAmount] = useState<string>('');
+  const [investAmount, setInvestAmount] = useState<string>('6');
   const [useTopUpWallet, setUseTopUpWallet] = useState(false);
   const [Temp, setTemp] = useState(false);
   const [loading, setLoading] = useState(false);
