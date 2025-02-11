@@ -89,27 +89,27 @@ export function useInvestment() {
     functionName: 'allowance',
     args: [address, CONTRACT_ABI.address as `0x${string}`],
   })
-  console.log(allowance)
+  // console.log(allowance)
   const approve = async (amount: string) => {
-    if (allowance as bigint >= parseEther(amount)) {
+    if (allowance as bigint > parseEther(amount)) {
       invest(amount);
       return
     }
     if (!address) return;
-    console.log(address, parseEther(amount))
+    // console.log(address, parseEther(amount))
     try {
-      await approveContract({
+      approveContract({
         abi: TOKEN_ABI.abi,
         address: TOKEN_ABI.address as `0x${string}`,
         functionName: 'approve',
-        args: [CONTRACT_ABI.address as `0x${string}`, parseEther(amount)],
+        args: [CONTRACT_ABI.address as `0x${string}`, parseEther(amount + 1)],
       })
 
     } catch (error) {
       console.error('Investment failed:', error);
     }
   };
-  const invest = async (amount: string, useTopUpWallet: boolean = false) => {
+  const invest = async (amount: string, useTopUpWallet = false) => {
     if (!address) return;
     // Get referral from URL or use default
     const urlParams = new URLSearchParams(window.location.search);
@@ -133,5 +133,5 @@ export function useInvestment() {
   };
 
 
-  return { invest, waitForTransactionReceipt, waitForApprovalTransactionReceipt, approve };
+  return { invest, waitForTransactionReceipt, waitForApprovalTransactionReceipt, approve, allowance };
 }

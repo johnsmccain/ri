@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Copy } from 'lucide-react';
 import { useUserInfo,  useInvestment } from './hooks/useContract';
-import { formatEther } from 'viem';
+import { formatEther, parseEther } from 'viem';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import ReferralList from './components/ReferralList';
@@ -17,11 +17,18 @@ function App() {
   const [loading, setLoading] = useState(false);
   const { userInfo, userTopUpWallet } = useUserInfo();
   // const { royaltyPool, totalRoyaltyPool } = useRoyaltyPool();
-  const { invest, approve, waitForTransactionReceipt, waitForApprovalTransactionReceipt } = useInvestment();
+  const { invest, approve, allowance, waitForTransactionReceipt, waitForApprovalTransactionReceipt } = useInvestment();
 
-  const handleCopyReferral = () => {
-    navigator.clipboard.writeText(`https://grich.cloud?referral=${userInfo?.id || '0'}`);
-  };
+
+const handleCopyReferral = () => {
+  const baseUrl = window.location.origin; // Get the current domain dynamically
+  const url = `${baseUrl}?referral=${userInfo?.id || '0'}`;
+  navigator.clipboard.writeText(url).then(() => {
+    console.log('Referral link copied:', url);
+  }).catch(err => {
+    console.error('Failed to copy:', err);
+  });
+};
 
   const handleInvest = () => {
     if(useTopUpWallet){
@@ -130,14 +137,15 @@ function App() {
               <button
                 onClick={handleInvest}
                 disabled={loading || !isConnected}
-                className="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                className="w-full bg-green-400 text-black py-3 rounded-lg font-semibold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
               >
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">
                     <span>Processing...</span>
                     <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                   </div>
-                ) : isAccountActivated ? (
+                ) : isAccountActivated && allowance && allowance as bigint > parseEther(investAmount) ? 
+                (`Invest ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`): isAccountActivated?  (
                   `Approve ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`
                 ) : (
                   'Approve 6$ USDT'
@@ -187,7 +195,7 @@ function App() {
                 </div>
                 <button
                   onClick={handleCopyReferral}
-                  className="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-green-500 transition-colors flex items-center justify-center gap-2"
                 >
                   <Copy className="w-4 h-4" />
                   Copy
@@ -200,7 +208,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-black to-yellow-900">
+    <div className="min-h-screen bg-gradient-to-b from-[#2DC6FE] via-[#2DC1FC] to-[#2DC1FC]">
       <div className="container mx-auto px-4 py-6">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {isConnected ? (

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useUserInfo } from '../hooks/useContract';
 import { formatEther } from 'viem';
@@ -5,10 +6,29 @@ import { formatEther } from 'viem';
 const ReferralList = () => {
   const { address } = useAccount();
   const { userInfo } = useUserInfo();
+  const [isCopied, setIsCopied] = useState(false);
+
+  // Get the current URL
+  const currentUrl = window.location.origin; // e.g., "https://grich.cloud"
+
+  // Generate the referral link dynamically
+  const referralLink = `${currentUrl}?referral=${userInfo?.id || '0'}`;
 
   const formatUSD = (value: bigint | undefined) => {
     if (!value) return '$0';
     return `$${parseFloat(formatEther(value)).toFixed(2)}`;
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard
+      .writeText(referralLink)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+      })
+      .catch(() => {
+        alert('Failed to copy link. Please copy it manually.');
+      });
   };
 
   if (!address) {
@@ -18,6 +38,8 @@ const ReferralList = () => {
       </div>
     );
   }
+
+
 
   return (
     <div className="container mx-auto px-4 py-8 mt-16">
@@ -47,14 +69,14 @@ const ReferralList = () => {
             <input
               type="text"
               readOnly
-              value={`https://grich.cloud?referral=${userInfo?.id || '0'}`}
+              value={referralLink}
               className="flex-1 p-2 border rounded-lg bg-white"
             />
             <button
-              onClick={() => navigator.clipboard.writeText(`https://grich.cloud?referral=${userInfo?.id || '0'}`)}
+              onClick={handleCopyLink}
               className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors"
             >
-              Copy
+              {isCopied ? 'Copied!' : 'Copy'}
             </button>
           </div>
         </div>

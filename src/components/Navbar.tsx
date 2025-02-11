@@ -15,7 +15,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
       <div className="flex items-center gap-8">
         <div className="text-2xl md:text-4xl font-bold">
           <span className="text-2xl font-bold text-white">
-            <span className="text-yellow-400">G</span>Rich
+            <span className="text-green-400">G</span>Rich
           </span>
         </div>
         
@@ -24,7 +24,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
             onClick={() => setActiveTab('dashboard')}
             className={`px-4 py-1.5 rounded-lg font-medium transition-colors ${
               activeTab === 'dashboard'
-                ? 'bg-yellow-400 text-black'
+                ? 'bg-green-400 text-black'
                 : 'text-white hover:bg-gray-800'
             }`}
           >
@@ -34,7 +34,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
             onClick={() => setActiveTab('referrals')}
             className={`px-4 py-1.5 rounded-lg font-medium transition-colors ${
               activeTab === 'referrals'
-                ? 'bg-yellow-400 text-black'
+                ? 'bg-green-400 text-black'
                 : 'text-white hover:bg-gray-800'
             }`}
           >
@@ -44,7 +44,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
             onClick={() => setActiveTab('transactions')}
             className={`px-4 py-1.5 rounded-lg font-medium transition-colors ${
               activeTab === 'transactions'
-                ? 'bg-yellow-400 text-black'
+                ? 'bg-green-400 text-black'
                 : 'text-white hover:bg-gray-800'
             }`}
           >
@@ -75,7 +75,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
               }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === 'dashboard'
-                  ? 'bg-yellow-400 text-black'
+                  ? 'bg-green-400 text-black'
                   : 'text-white hover:bg-gray-800'
               }`}
             >
@@ -88,7 +88,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
               }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === 'referrals'
-                  ? 'bg-yellow-400 text-black'
+                  ? 'bg-green-400 text-black'
                   : 'text-white hover:bg-gray-800'
               }`}
             >
@@ -101,7 +101,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
               }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === 'transactions'
-                  ? 'bg-yellow-400 text-black'
+                  ? 'bg-green-400 text-black'
                   : 'text-white hover:bg-gray-800'
               }`}
             >

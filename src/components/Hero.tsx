@@ -10,9 +10,9 @@ const Hero = () => {
 
   return (
     <div className="py-2 md:py-0 px-3 overflow-y-auto min-h-[calc(100vh-6rem)] w-full container mx-auto flex flex-col items-center justify-center">
-      <div className="flex flex-col gap-5 items-center md:p-20 max-w-[900px] p-5 border-yellow-400 border rounded-lg border-opacity-20 bg-black bg-opacity-40 backdrop-blur-md">
+      <div className="flex flex-col gap-5 items-center md:p-20 max-w-[900px] p-5 border-green-400 border rounded-lg border-opacity-20 bg-black bg-opacity-70 backdrop-blur-md">
         <h1 className="font-bold text-3xl md:text-5xl text-center text-white">
-          Welcome to <span className="text-yellow-400">GRich</span>
+          Welcome to <span className="text-green-400">GRich</span>
         </h1>
         <p className="text-gray-300 text-center text-sm md:text-base leading-relaxed">
           Experience a fully decentralized platform with no admin control, where all income is automatically distributed through smart contracts. Transparent, secure, and fair – our system empowers you to grow your network and earn in real time without intermediaries.
