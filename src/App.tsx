@@ -17,7 +17,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const { userInfo, userTopUpWallet } = useUserInfo();
   // const { royaltyPool, totalRoyaltyPool } = useRoyaltyPool();
-  const { invest, approve, allowance, waitForTransactionReceipt, waitForApprovalTransactionReceipt } = useInvestment();
+  const { invest, approve, waitForTransactionReceipt, waitForApprovalTransactionReceipt } = useInvestment();
 
 
 const handleCopyReferral = () => {
@@ -130,7 +130,7 @@ const handleCopyReferral = () => {
                 <div className="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
                   <span>Total Investment</span>
                   <span className="text-yellow-600">
-                    {formatUSD(userInfo?.totalDepositUSDT)}
+                    { userInfo?.id > 1000n ? formatUSD(userInfo?.totalDepositUSDT): 0n}
                   </span>
                 </div>
               </div>
@@ -144,8 +144,8 @@ const handleCopyReferral = () => {
                     <span>Processing...</span>
                     <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                   </div>
-                ) : isAccountActivated && allowance && allowance as bigint > parseEther(investAmount) ? 
-                (`Invest ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`): isAccountActivated?  (
+                ) : isAccountActivated ? 
+                 (
                   `Approve ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`
                 ) : (
                   'Approve 6$ USDT'

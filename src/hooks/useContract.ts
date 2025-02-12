@@ -83,18 +83,9 @@ export function useInvestment() {
   const { isFetched: waitForApprovalTransactionReceipt } = useWaitForTransactionReceipt({
     hash: txHashApprove,
   })
-  const { data: allowance } = useReadContract({
-    abi: TOKEN_ABI.abi,
-    address: TOKEN_ABI.address as `0x${string}`,
-    functionName: 'allowance',
-    args: [address, CONTRACT_ABI.address as `0x${string}`],
-  })
+
   // console.log(allowance)
   const approve = async (amount: string) => {
-    if (allowance as bigint > parseEther(amount)) {
-      invest(amount);
-      return
-    }
     if (!address) return;
     // console.log(address, parseEther(amount))
     try {
@@ -102,7 +93,7 @@ export function useInvestment() {
         abi: TOKEN_ABI.abi,
         address: TOKEN_ABI.address as `0x${string}`,
         functionName: 'approve',
-        args: [CONTRACT_ABI.address as `0x${string}`, parseEther(amount + 1)],
+        args: [CONTRACT_ABI.address as `0x${string}`, parseEther(String(Number(amount) + 0.1))],
       })
 
     } catch (error) {
@@ -133,5 +124,5 @@ export function useInvestment() {
   };
 
 
-  return { invest, waitForTransactionReceipt, waitForApprovalTransactionReceipt, approve, allowance };
+  return { invest, waitForTransactionReceipt, waitForApprovalTransactionReceipt, approve };
 }
