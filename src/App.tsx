@@ -130,7 +130,7 @@ const handleCopyReferral = () => {
                 <div className="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
                   <span>Total Investment</span>
                   <span className="text-yellow-600">
-                    { userInfo?.id > 1000n ? formatUSD(userInfo?.totalDepositUSDT): 0n}
+                    { Number(userInfo?.id) > Number(1000) ? formatUSD(userInfo?.totalDepositUSDT): 0}
                   </span>
                 </div>
               </div>
