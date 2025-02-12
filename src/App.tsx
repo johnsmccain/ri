@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Copy } from 'lucide-react';
 import { useUserInfo,  useInvestment } from './hooks/useContract';
-import { formatEther, parseEther } from 'viem';
+import { formatEther } from 'viem';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import ReferralList from './components/ReferralList';
@@ -66,7 +66,7 @@ const handleCopyReferral = () => {
     return `${parseFloat(formatEther(value)).toFixed(2)}`;
   };
 
-  const isAccountActivated = userInfo?.totalDepositUSDT && userInfo.totalDepositUSDT > 0n;
+  const isAccountActivated = Number(userInfo?.id || '0') > 1000;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -162,7 +162,7 @@ const handleCopyReferral = () => {
                     {formatUSD(userInfo?.currentRoyaltyIncomeUSDT as bigint)} / {formatUSD(userInfo?.royaltyIncomeUSDT as bigint)}
                   </span>
                   <span className="bg-gray-200 px-3 py-1 rounded-lg text-sm">
-                    {userInfo?.currentRoyaltyIncomeUSDT > 0n ? 'Eligible' : 'Not Eligible'}
+                    {userInfo?.currentRoyaltyIncomeUSDT as bigint > 0n ? 'Eligible' : 'Not Eligible'}
                   </span>
                 </div>
               </div>

@@ -9,9 +9,9 @@ export function useUserInfo() {
     address: CONTRACT_ABI.address as `0x${string}`,
     abi: CONTRACT_ABI.abi,
     functionName: 'getUserDetail',
-    args: [address],
+    args: [address as `0x${string}`],
     // enabled: !!address,
-  }) as any;
+  });
 
   // console.log(userInfo)
   const { data: userTopUpWallet } = useReadContract({
