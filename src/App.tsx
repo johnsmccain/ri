@@ -121,7 +121,7 @@ const handleCopyReferral = () => {
                   onClick={() => setUseTopUpWallet(true)}
                 >
                   <div className="text-3xl font-bold mb-2">
-                    {formatUSD(userTopUpWallet as bigint)}
+                    { Number(userInfo?.id) > Number(1000) ? formatUSD(userTopUpWallet as bigint) : 0}
                   </div>
                   <div className="text-gray-600">TopUp Wallet</div>
                 </div>
