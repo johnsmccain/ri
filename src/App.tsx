@@ -67,6 +67,25 @@ const handleCopyReferral = () => {
   };
 
   const isAccountActivated = Number(userInfo?.id || '0') > 1000;
+  const [isCopied, setIsCopied] = useState(false);
+
+  // Get the current URL
+  const currentUrl = window.location.origin; // e.g., "https://grich.cloud"
+
+  // Generate the referral link dynamically
+  const referralLink = `${currentUrl}?referral=${userInfo?.id || '0'}`;
+
+  const handleCopyLink = () => {
+    navigator.clipboard
+        .writeText(referralLink)
+        .then(() => {
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+        })
+        .catch(() => {
+          alert('Failed to copy link. Please copy it manually.');
+        });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -78,7 +97,7 @@ const handleCopyReferral = () => {
         return (
           <div className="space-y-8 mt-20">
             <section className="bg-white rounded-xl p-6">
-              <h2 className="text-2xl font-bold mb-6">Make Your Mark</h2>
+              <h2 className="text-2xl font-bold mb-6"> Welcome to Grich</h2>
               <div className="grid grid-cols-2 gap-6 mb-6">
                 <div 
                   onClick={() => setUseTopUpWallet(false)}
@@ -146,9 +165,9 @@ const handleCopyReferral = () => {
                   </div>
                 ) : isAccountActivated ? 
                  (
-                  `Approve ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`
+                  `Activate ${investAmount || '0'}$ USDT${useTopUpWallet ? ' (Using Topup)' : ''}`
                 ) : (
-                  'Approve 6$ USDT'
+                  'Activate 6$ USDT'
                 )}
               </button>
             </section>
@@ -208,7 +227,7 @@ const handleCopyReferral = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2DC6FE] via-[#2DC1FC] to-[#2DC1FC]">
+    <div className="min-h-screen bg-gradient-to-b from-[#2DC6FE] via-[#2DC6FE] to-[#2DC6FE]">
       <div className="container mx-auto px-4 py-6">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {isConnected ? (
@@ -216,6 +235,28 @@ const handleCopyReferral = () => {
         ) : (
           <Hero />
         )}
+      </div>
+      <div className={"container mx-auto px-4 py-6"}>
+        <div className="bg-white rounded-xl p-6">
+          <h2 className="text-2xl font-bold mb-4">Your Referral Link</h2>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="text-gray-600 mb-2">Share this link to earn referral rewards:</p>
+            <div className="flex items-center gap-2">
+              <input
+                  type="text"
+                  readOnly
+                  value={referralLink}
+                  className="flex-1 p-2 border rounded-lg bg-white"
+              />
+              <button
+                  onClick={handleCopyLink}
+                  className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+              >
+                {isCopied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
